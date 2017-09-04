@@ -54,7 +54,7 @@ class GmailAPI(object):
         if not os.path.exists(credential_dir):
             os.makedirs(credential_dir)
         credential_path = os.path.join(credential_dir,
-                                       'gmail_app_email_reader.json')
+                                       'gmail_app_wrapper.json')
 
         store = Storage(credential_path)
         credentials = store.get()
@@ -82,8 +82,11 @@ class GmailAPI(object):
         unread_msgs = service.users().messages().list(
             userId=USER_ID, labelIds=[label]).execute()
 
-        messages = unread_msgs['messages']
-
+        try:
+            messages = unread_msgs['messages']
+        except (KeyError,):
+            # No UNREAD MESSAGES
+            return []
         # Returns a list of dicts
         return messages
 
