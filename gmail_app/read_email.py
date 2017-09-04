@@ -3,6 +3,8 @@ import httplib2
 import json
 import os
 
+from dateutil import parser
+
 from apiclient import discovery
 
 from oauth2client import client
@@ -12,9 +14,12 @@ from oauth2client.file import Storage
 
 # If modifying these scopes, delete your previously saved credentials
 # at ~/.credentials/gmail-python-quickstart.json
-SCOPES = 'https://www.googleapis.com/auth/gmail.readonly'
+SCOPES = 'https://www.googleapis.com/auth/gmail.modify'
 CLIENT_SECRET_FILE = 'client_secret.json'
-APPLICATION_NAME = 'Gmail API Python Quickstart'
+APPLICATION_NAME = 'GMAIL API Wrapper'
+USER_ID = 'me'
+INBOX_LABEL = 'INBOX'
+UNREAD_LABEL = 'UNREAD'
 
 
 class GmailAPI(object):
@@ -69,7 +74,106 @@ class GmailAPI(object):
         service = discovery.build('gmail', 'v1', http=http)
         return service
 
-    def get_label(self):
+    def list_messages(self, label=None):
+        """Retrieve all messages given a label."""
+        label = label if label else INBOX_LABEL
+
+        service = self.get_service()
+        unread_msgs = service.users().messages().list(
+            userId=USER_ID, labelIds=[label]).execute()
+
+        messages = unread_msgs['messages']
+
+        # Returns a list of dicts
+        return messages
+
+    def get_message(self, msg_id):
+        """Get specific message."""
+        service = self.get_service()
+        msg = service.users().messages().get(
+            userId=USER_ID, id=msg_id).execute()
+
+        return msg
+
+    def get_unread_messages(self):
+        """Get all UNREAD messages."""
+        return self.list_messages(label=UNREAD_LABEL)
+
+    def serialize_message(self, message_headers):
+        """Get message payload.
+
+        Get Subject, Date and Sender from the message_headers passed
+        """
+        final_payload = {}
+        for each in message_headers:
+            if each['name'] == 'Subject':
+                final_payload['subject'] = each['value']
+
+            if each['name'] == 'Date':
+                parsed_date = parser.parse(each['value'])
+                final_payload['date'] = parsed_date.isoformat()
+
+            if each['name'] == 'From':
+                final_payload['from'] = each['value']
+
+            try:
+                final_payload['from']
+                final_payload['date']
+                final_payload['subject']
+                break
+            except (KeyError,):
+                pass
+        return final_payload
+
+    def mark_as_read(self, msg_id):
+        """Mark a message as read."""
+        service = self.get_service()
+        body_modifier = {
+            'removeLabelIds': [UNREAD_LABEL]
+        }
+        return service.users().messages().modify(
+            userId=USER_ID, id=msg_id, body=body_modifier).execute()
+
+    def bulk_mark_as_read(self, messages=[]):
+        """Bulk mark UNREAD emails as READ."""
+        messages = messages if messages else self.get_unread_messages()
+
+        for each in messages:
+            self.mark_as_read(each['id'])
+
+    def get_message_headers(self, message):
+        """Get message headers."""
+        return message['headers']
+
+    def get_message_payload(self, message):
+        """Get message Payload."""
+        return message['payload']
+
+    def check_new_mail(self):
+        """Entry Point.
+
+        Checks UNREAD emails
+        """
+        final_mails = []
+        unread_emails = self.get_unread_messages()
+        for each in unread_emails:
+
+            # Get specific message instance
+            msg = self.get_message(each['id'])
+
+            # Message Payload
+            msg_payload = self.get_message_payload(msg)
+
+            # Message Headers
+            msg_headers = self.get_message_headers(msg_payload)
+
+            # Serialize message
+            serialized_payload = self.serialize_message(msg_headers)
+
+            final_mails.append(serialized_payload)
+        return final_mails
+
+    def get_labels(self):
         """Show basic usage of the Gmail API.
 
         Creates a Gmail API service object and outputs a list of label
@@ -86,6 +190,7 @@ class GmailAPI(object):
         return True
 
     def get_total_messages(self):
+        """Get total messages count."""
         service = self.get_service()
         results = service.users().getProfile(userId='me').execute()
         total_messages = {
@@ -99,6 +204,5 @@ class GmailAPI(object):
 
 if __name__ == '__main__':
     api = GmailAPI()
-    api.get_label()
-    total_messages = api.get_total_messages()
-    print(total_messages)
+    mails = api.check_new_mail()
+    print(mails)
