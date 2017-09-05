@@ -4,8 +4,6 @@ import json
 from dateutil import parser
 
 from gmail_api_wrapper import USER_ID, INBOX_LABEL, UNREAD_LABEL
-
-# from gmail_api_wrapper import USER_ID, INBOX_LABEL, UNREAD_LABEL
 from gmail_api_wrapper.connection import GmailAPIConnection
 
 
@@ -24,7 +22,7 @@ class GmailAPIReadWrapper(object):
 
         labels = labels if labels else [INBOX_LABEL]
 
-        has_all = all([x in labels for x in all_labels_present])
+        has_all = all([x in all_labels_present for x in labels])
 
         assert has_all is True, ('Please provide the correct labels. '
                                  'Available labels are: {}'
