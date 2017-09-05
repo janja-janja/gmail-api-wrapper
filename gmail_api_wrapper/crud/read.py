@@ -19,7 +19,7 @@ class GmailAPIReadWrapper(object):
     def list_messages(self, labels=[]):
         """Retrieve all messages given a label."""
         assert isinstance(labels, (list, tuple,)), (
-            '`label` must be a list or tuple.')
+            '`labels` param must be a list or tuple.')
         all_labels_present = self.get_labels()
 
         labels = labels if labels else [INBOX_LABEL]
@@ -36,9 +36,9 @@ class GmailAPIReadWrapper(object):
         try:
             messages = unread_msgs['messages']
         except (KeyError,):
-            # No UNREAD MESSAGES
-            return []
-        # Returns a list of dicts
+            # No Messages
+            messages = []
+
         return messages
 
     def get_message(self, msg_id):
@@ -51,7 +51,7 @@ class GmailAPIReadWrapper(object):
         """Get all UNREAD messages."""
         return self.list_messages(labels=[UNREAD_LABEL])
 
-    def serialize_message(self, message_headers):
+    def serialize_message_headers(self, message_headers):
         """Get message payload.
 
         Get Subject, Date and Sender from the message_headers passed
@@ -105,7 +105,7 @@ class GmailAPIReadWrapper(object):
             msg_headers = self._get_message_headers(msg_payload)
 
             # Serialize message
-            serialized_payload = self.serialize_message(msg_headers)
+            serialized_payload = self.serialize_message_headers(msg_headers)
 
             final_mails.append(serialized_payload)
         return final_mails
