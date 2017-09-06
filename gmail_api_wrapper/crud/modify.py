@@ -2,7 +2,7 @@
 
 Marking Messages as UNREAD or as READ
 """
-from gmail_api_wrapper import USER_ID, UNREAD_LABEL
+from gmail_api_wrapper import USER_ID, UNREAD_LABEL, READ_LABEL
 from gmail_api_wrapper.connection import GmailAPIConnection
 
 
@@ -21,7 +21,14 @@ class GmailAPIModifyWrapper(object):
         return self.gmail_api.users().messages().modify(
             userId=USER_ID, id=msg_id, body=body_modifier).execute()
 
-    def bulk_mark_as_read(self, messages=[]):
-        """Bulk mark UNREAD emails as READ."""
-        for each in messages:
-            self.mark_as_read(each['id'])
+    def bulk_mark_as_read(self, message_ids=[]):
+        """Bulk mark UNREAD emails as READ.
+
+        TODO: Confirm this
+        """
+        body_modifier = {
+            'addLabelIds': [READ_LABEL],
+            'removeLabelIds': [UNREAD_LABEL]
+        }
+        return self.gmail_api.users().messages().batchModify(
+            userId=USER_ID, body=body_modifier).execute()

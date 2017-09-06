@@ -1,26 +1,14 @@
 # Gmail API Wrapper Changelog
+--------------------------------------------------------------------------------
 
-## Version Number [dd-mm-yyyy]
----------------------------
+### v0.0.1a3 [05-09-2017]
 
 Features:
 
-- [x] Added this feature
+- [x] Bump `google-api-python-client` to 1.6.3 from 1.6.2
+- [x] Allow fetching new messages from specific email addresses
 
-Bugs:
-
-- [x] Fixed that one
-
-Documentation:
-
-- [x] Updated these docs
-
-Breaking:
-
-- [x] This changes will break your code!!
---------------------------------------------------------------------------------
-
-### 0.0.1a2 [05-09-2017]
+### v0.0.1a2 [05-09-2017]
 
 Bugs:
 
@@ -33,7 +21,7 @@ Breaking:
 
 
 
-### 0.0.1a1 [04-09-2017]
+### v0.0.1a1 [04-09-2017]
 
 Features:
 
@@ -45,7 +33,7 @@ Features:
 - [x] Add `GmailAPIWriteWrapper` helper class in `gmail_api_wrapper.crud.modify.py` module
 
 
-### 0.0.1a0 [27-07-2017]
+### v0.0.1a0 [27-07-2017]
 
 Features:
 

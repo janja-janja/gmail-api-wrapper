@@ -17,7 +17,7 @@ setup(
     author_email='dee.caranja@gmail.com',
     packages=find_packages(exclude=['tests', ]),
     install_requires=[
-        'google-api-python-client==1.6.2',
+        'google-api-python-client==1.6.3',
         'python-dateutil',
     ],
     include_package_data=True,
