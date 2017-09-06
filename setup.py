@@ -2,15 +2,16 @@
 from setuptools import setup, find_packages
 
 from gmail_api_wrapper.version import __version__
+from gmail_api_wrapper.utils import read_file
 
 VERSION = __version__
-
-with open('README.md') as readme:
-    README = readme.read()
+README = read_file('README.md')
+LICENSE = read_file('LICENSE')
 
 setup(
     name='gmail-api-wrapper',
     version=VERSION,
+    license=LICENSE,
     description='Python Gmail API Wrapper',
     long_description=README,
     author='Denis Karanja',
