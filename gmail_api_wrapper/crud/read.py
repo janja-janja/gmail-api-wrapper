@@ -13,23 +13,32 @@ class GmailAPIReadWrapper(object):
     def __init__(self):
         """Init stuff."""
         self.gmail_api = GmailAPIConnection().gmail_api_connect()
+        self.all_labels_present = self.get_labels()
 
-    def list_messages(self, labels=[]):
-        """Retrieve all messages given a label."""
+    def list_messages(self, labels=[], sender=None):
+        """Retrieve all messages given a label.
+
+        :param: labels:list - A list of the various labels you wish to target
+        e.g INBOX, SPAM, UNREAD e.t.c
+
+        :param: sender:string - CSV with email addresses to allow targetting
+        messages from specific email addresses
+        """
+        sender = 'from:{}'.format(sender) if sender else 'from:'
+
         assert isinstance(labels, (list, tuple,)), (
             '`labels` param must be a list or tuple.')
-        all_labels_present = self.get_labels()
 
         labels = labels if labels else [INBOX_LABEL]
 
-        has_all = all([x in all_labels_present for x in labels])
+        has_all = all([x in self.all_labels_present for x in labels])
 
         assert has_all is True, ('Please provide the correct labels. '
                                  'Available labels are: {}'
-                                 .format(','.join(all_labels_present)))
+                                 .format(','.join(self.all_labels_present)))
 
         unread_msgs = self.gmail_api.users().messages().list(
-            userId=USER_ID, labelIds=labels).execute()
+            userId=USER_ID, labelIds=labels, q=sender).execute()
 
         try:
             messages = unread_msgs['messages']
@@ -40,19 +49,28 @@ class GmailAPIReadWrapper(object):
         return messages
 
     def get_message(self, msg_id):
-        """Get specific message."""
+        """Get specific message.
+
+        :param: msg_id - Message ID
+        """
         msg = self.gmail_api.users().messages().get(
             userId=USER_ID, id=msg_id).execute()
         return msg
 
-    def get_unread_messages(self):
-        """Get all UNREAD messages."""
-        return self.list_messages(labels=[UNREAD_LABEL])
+    def get_unread_messages(self, sender=None):
+        """Get all UNREAD messages.
+
+        :param: sender:string - CSV with email addresses to allow targetting
+        messages from specific email addresses
+        """
+        return self.list_messages(labels=[UNREAD_LABEL], sender=sender)
 
     def serialize_message_headers(self, message_headers):
         """Get message payload.
 
         Get Subject, Date and Sender from the message_headers passed
+
+        :param: message_headers - Headers associated with a particular message
         """
         final_payload = {}
         for each in message_headers:
@@ -76,21 +94,34 @@ class GmailAPIReadWrapper(object):
         return final_payload
 
     def _get_message_headers(self, message):
-        """Get message headers."""
+        """Get message headers.
+
+        :param: message - Gmail message object
+        """
         return message['headers']
 
     def _get_message_payload(self, message):
-        """Get message Payload."""
+        """Get message Payload.
+
+        :param: message - Gmail message object
+        """
         return message['payload']
 
     def _get_message_body(self, message_payload):
-        """Get message body."""
+        """Get message body.
+
+        :param: message_payload - Gmail message payload object
+        """
         pass
 
-    def check_new_mail(self):
-        """Check new messages."""
+    def check_new_mail(self, sender=None):
+        """Check new messages.
+
+        :param: sender:string - CSV with email addresses to allow targetting
+        messages from specific email addresses
+        """
         final_mails = []
-        unread_emails = self.get_unread_messages()
+        unread_emails = self.get_unread_messages(sender=sender)
         for each in unread_emails:
 
             # Get specific message instance
