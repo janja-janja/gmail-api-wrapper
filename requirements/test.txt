@@ -1,5 +1,6 @@
 -r base.txt
 
+tox
 pytest
 coverage
 flake8
