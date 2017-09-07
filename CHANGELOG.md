@@ -7,6 +7,7 @@ Features:
 
 - [x] Bump `google-api-python-client` to 1.6.3 from 1.6.2
 - [x] Allow fetching new messages from specific email addresses
+- [x] Add `utils.py` module to hold helper methods
 
 ### v0.0.1a2 [05-09-2017]
 
