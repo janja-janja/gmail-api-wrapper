@@ -1,15 +1,32 @@
 """Helper utilities."""
-from dateutil import parser
+import os
 
 
-def read_file(file_path):
+def get_absolute_path(file_name, package_level=True):
+    """Get file path given file name."""
+    if package_level:
+        # Inside `gmail_api_wrapper`
+        dirname = os.path.dirname(__file__)
+    else:
+        # Outside `gmail_api_wrapper`
+        dirname = os.path.join(os.path.dirname(__file__), os.pardir)
+
+    file_path = os.path.abspath(os.path.join(dirname, file_name))
+    return file_path
+
+
+def read_file(file_name, package_level=True):
     """Get file content given file path.
 
-    :param: file_path:string - path to file
+    :param: file_name:string - name of file
     """
-    with open(file_path) as file_descriptor:
-        content = file_descriptor.read()
+    file_path = get_absolute_path(file_name, package_level=package_level)
 
+    try:
+        with open(file_path) as file_descriptor:
+            content = file_descriptor.read()
+    except (FileNotFoundError,):
+        content = 'Unknown'
     return content
 
 
@@ -18,4 +35,8 @@ def parse_string_to_date(date_to_format):
 
     :param: date_to_string:string - Date in String Format
     """
-    return parser.parse(date_to_format)
+    try:
+        from dateutil import parser
+        return parser.parse(date_to_format)
+    except (ImportError,):
+        pass

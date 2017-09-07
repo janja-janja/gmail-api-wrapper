@@ -31,4 +31,6 @@ class GmailAPIModifyWrapper(object):
             'removeLabelIds': [UNREAD_LABEL]
         }
         return self.gmail_api.users().messages().batchModify(
-            userId=USER_ID, body=body_modifier).execute()
+            userId=USER_ID, messageIds=message_ids,
+            body=body_modifier
+        ).execute()
