@@ -5,14 +5,14 @@ from gmail_api_wrapper.version import __version__
 from gmail_api_wrapper.utils import read_file
 
 VERSION = __version__
-README = read_file('README.md')
-LICENSE = read_file('LICENSE')
+README = read_file('README.rst', package_level=False)
+LICENSE = read_file('LICENSE', package_level=False)
 
 setup(
     name='gmail-api-wrapper',
     version=VERSION,
     license=LICENSE,
-    description='Python Gmail API Wrapper',
+    description='Gmail API Wrapper - Python Client',
     long_description=README,
     author='Denis Karanja',
     author_email='dee.caranja@gmail.com',

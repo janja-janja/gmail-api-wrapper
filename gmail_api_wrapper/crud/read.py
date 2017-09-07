@@ -37,15 +37,10 @@ class GmailAPIReadWrapper(object):
                                  'Available labels are: {}'
                                  .format(','.join(self.all_labels_present)))
 
-        unread_msgs = self.gmail_api.users().messages().list(
+        messages_list = self.gmail_api.users().messages().list(
             userId=USER_ID, labelIds=labels, q=sender).execute()
 
-        try:
-            messages = unread_msgs['messages']
-        except (KeyError,):
-            # No Messages
-            messages = []
-
+        messages = messages_list.get('messages', [])
         return messages
 
     def get_message(self, msg_id):
@@ -145,17 +140,18 @@ class GmailAPIReadWrapper(object):
         Creates a Gmail API service object and outputs a list of label
         names of the user's Gmail account.
         """
-        results = self.gmail_api.users().labels().list(userId='me').execute()
+        results = self.gmail_api.users().labels().list(
+            userId=USER_ID).execute()
         labels = results.get('labels', [])
         return [label['name'] for label in labels]
 
     def get_total_messages(self):
         """Get total messages count."""
-        results = self.gmail_api.users().getProfile(userId='me').execute()
+        results = self.gmail_api.users().getProfile(userId=USER_ID).execute()
         total_messages = {
-            'Total Messages': results.get('messagesTotal', None),
-            'Total Threads': results.get('threadsTotal', None),
-            'Email Address': results.get('emailAddress', None)
+            'Total Messages': results.get('messagesTotal', 0),
+            'Total Threads': results.get('threadsTotal', 0),
+            'Email Address': results.get('emailAddress', USER_ID)
         }
         formated_json = json.dumps(total_messages, indent=4)
         return formated_json
