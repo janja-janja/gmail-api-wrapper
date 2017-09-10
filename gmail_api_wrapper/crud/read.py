@@ -106,8 +106,15 @@ class GmailAPIReadWrapper(object):
         """Get message body.
 
         :param: message_payload - Gmail message payload object
+
+        Returns a base64 encoded string. You can further decode it to get
+        the actual message.
+        base64.b64decode(message_payload['parts'][0]['body']['data'])
         """
-        pass
+        try:
+            return message_payload['parts'][0]['body']['data']
+        except (KeyError,):
+            return None
 
     def check_new_mail(self, sender=None):
         """Check new messages.
@@ -130,6 +137,10 @@ class GmailAPIReadWrapper(object):
 
             # Serialize message
             serialized_payload = self.serialize_message_headers(msg_headers)
+
+            # Get message body
+            serialized_payload['base64_msg_body'] = self._get_message_body(
+                msg_payload)
 
             final_mails.append(serialized_payload)
         return final_mails
