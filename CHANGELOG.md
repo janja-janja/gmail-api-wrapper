@@ -1,5 +1,12 @@
 # Gmail API Wrapper Changelog
 --------------------------------------------------------------------------------
+### v0.0.1a4 [10-09-2017]
+
+Features:
+
+- [x] Add Circle CI Configs
+- [x] Extract base64 message body
+
 
 ### v0.0.1a3 [05-09-2017]
 

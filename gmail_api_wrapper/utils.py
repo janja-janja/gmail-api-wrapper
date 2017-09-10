@@ -22,11 +22,8 @@ def read_file(file_name, package_level=True):
     """
     file_path = get_absolute_path(file_name, package_level=package_level)
 
-    try:
-        with open(file_path) as file_descriptor:
-            content = file_descriptor.read()
-    except (FileNotFoundError,):
-        content = 'Unknown'
+    with open(file_path) as file_descriptor:
+        content = file_descriptor.read()
     return content
 
 
