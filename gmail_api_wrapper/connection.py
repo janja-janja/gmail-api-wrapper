@@ -9,12 +9,18 @@ from oauth2client import tools
 from oauth2client.file import Storage
 
 
-from gmail_api_wrapper import (
-    CLIENT_SECRET_FILE_PATH, APPLICATION_NAME, SCOPES,)
+from gmail_api_wrapper import APPLICATION_NAME
 
 
 class GmailAPIConnection(object):
     """Gmail API connection klass."""
+
+    def __init__(self):
+        """Init."""
+        self.client_secret_file_path = os.environ['GAW_CLIENT_SECRET_FILE_PATH']  # noqa
+        # If modifying these scopes, delete your previously saved credentials
+        # at ~/.credentials/client_secret.json
+        self.scopes = os.environ['GAW_SCOPES']
 
     def _get_connection_flags(self):
         """Get connection flags."""
@@ -46,7 +52,7 @@ class GmailAPIConnection(object):
         credentials = store.get()
         if not credentials or credentials.invalid:
             flow = client.flow_from_clientsecrets(
-                CLIENT_SECRET_FILE_PATH, SCOPES)
+                self.client_secret_file_path, self.scopes)
             flow.user_agent = APPLICATION_NAME
             api_flags = self._get_connection_flags()
             if api_flags:

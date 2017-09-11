@@ -7,11 +7,17 @@ clean:
 build:
 	python setup.py build
 
-dist:
+tar_dist:
 	python setup.py sdist
 
 reinstall:
 	which gmail-api-wrapper && pip uninstall -y gmail-api-wrapper || echo "no gmail-api-wrapper found"
 	pip install .
 
-.PHONY: clean build dist all reinstall
+whl_dist:
+	python setup.py bdist_wheel -d dist/
+
+publish: clean whl_dist
+	twine upload dist/*
+
+.PHONY: clean build dist all whl_dist reinstall
