@@ -1,5 +1,15 @@
 # Gmail API Wrapper Changelog
 --------------------------------------------------------------------------------
+### v0.0.1a7 [11-09-2017]
+
+Bugs:
+
+- [x] Get message body from `return message_payload['body']['data']`
+when `return message_payload['parts'][0]['body']['data']` returns a `KeyError`
+exception
+
+
+
 ### v0.0.1a4 [10-09-2017]
 
 Features:

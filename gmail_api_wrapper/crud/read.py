@@ -114,7 +114,7 @@ class GmailAPIReadWrapper(object):
         try:
             return message_payload['parts'][0]['body']['data']
         except (KeyError,):
-            return None
+            return message_payload['body']['data']
 
     def check_new_mail(self, sender=None):
         """Check new messages.
