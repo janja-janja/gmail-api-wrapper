@@ -21,6 +21,7 @@ class GmailAPIConnection(object):
         # If modifying these scopes, delete your previously saved credentials
         # at ~/.credentials/client_secret.json
         self.scopes = os.environ['GAW_SCOPES']
+        self.ca_certs = os.get('GWA_CA_CERTS_BUNDLE')
 
     def _get_connection_flags(self):
         """Get connection flags."""
@@ -64,6 +65,6 @@ class GmailAPIConnection(object):
     def gmail_api_connect(self):
         """Get gmail service."""
         creds = self._get_credentials()
-        http = creds.authorize(httplib2.Http())
+        http = creds.authorize(httplib2.Http(ca_certs=self.ca_certs))
         service = discovery.build('gmail', 'v1', http=http)
         return service

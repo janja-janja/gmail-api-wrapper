@@ -17,7 +17,6 @@ setup(
     author='Denis Karanja',
     author_email='dee.caranja@gmail.com',
     url='https://github.com/yoda-yoda/gmail-api-wrapper/',
-    download_url='https://github.com/yoda-yoda/gmail-api-wrapper/archive/0.0.1a3.tar.gz',  # noqa
     keywords=['gmail-api-wrapper', 'gmail python client'],
     packages=find_packages(exclude=['tests', ]),
     install_requires=[
