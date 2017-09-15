@@ -17,11 +17,11 @@ class GmailAPIConnection(object):
 
     def __init__(self):
         """Init."""
-        self.client_secret_file_path = os.environ['GAW_CLIENT_SECRET_FILE_PATH']  # noqa
+        self.client_secret_file_name = 'client_secret.json'
         # If modifying these scopes, delete your previously saved credentials
         # at ~/.credentials/client_secret.json
         self.scopes = os.environ['GAW_SCOPES']
-        self.ca_certs = os.getenv('GWA_CA_CERTS_BUNDLE')
+        self.ca_certs = os.getenv('GWA_CA_CERTS_PEM_FILE')
 
     def _get_connection_flags(self):
         """Get connection flags."""
@@ -46,14 +46,14 @@ class GmailAPIConnection(object):
         credential_dir = os.path.join(home_dir, '.credentials')
         if not os.path.exists(credential_dir):
             os.makedirs(credential_dir)
-        credential_path = os.path.join(credential_dir,
-                                       'gmail_api_wrapper.json')
+        credential_path = os.path.join(
+            credential_dir, self.client_secret_file_name)
 
         store = Storage(credential_path)
         credentials = store.get()
         if not credentials or credentials.invalid:
             flow = client.flow_from_clientsecrets(
-                self.client_secret_file_path, self.scopes)
+                self.client_secret_file_name, self.scopes)
             flow.user_agent = APPLICATION_NAME
             api_flags = self._get_connection_flags()
             if api_flags:
@@ -65,6 +65,7 @@ class GmailAPIConnection(object):
     def gmail_api_connect(self):
         """Get gmail service."""
         creds = self._get_credentials()
-        http = creds.authorize(httplib2.Http(ca_certs=self.ca_certs))
+        request = httplib2.Http(ca_certs=self.ca_certs)
+        http = creds.authorize(request)
         service = discovery.build('gmail', 'v1', http=http)
         return service
