@@ -18,10 +18,10 @@ class GmailAPIReadWrapper(object):
     def list_messages(self, labels=[], sender=None):
         """Retrieve all messages given a label.
 
-        :param: labels:list - A list of the various labels you wish to target
+        :param: [labels:list] - A list of the various labels you wish to target
         e.g INBOX, SPAM, UNREAD e.t.c
 
-        :param: sender:string - CSV with email addresses to allow targetting
+        :param: [sender:string] - CSV with email addresses to allow targetting
         messages from specific email addresses
         """
         sender = 'from:{}'.format(sender) if sender else 'from:'
@@ -46,7 +46,7 @@ class GmailAPIReadWrapper(object):
     def get_message(self, msg_id):
         """Get specific message.
 
-        :param: msg_id - Message ID
+        :param: msg_id - Message ID. A Google object id
         """
         msg = self.gmail_api.users().messages().get(
             userId=USER_ID, id=msg_id).execute()
@@ -55,7 +55,7 @@ class GmailAPIReadWrapper(object):
     def get_unread_messages(self, sender=None):
         """Get all UNREAD messages.
 
-        :param: sender:string - CSV with email addresses to allow targetting
+        :param: [sender:string] - CSV with email addresses to allow targetting
         messages from specific email addresses
         """
         return self.list_messages(labels=[UNREAD_LABEL], sender=sender)

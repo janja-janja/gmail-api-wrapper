@@ -3,7 +3,11 @@ import os
 
 
 def get_absolute_path(file_name, package_level=True):
-    """Get file path given file name."""
+    """Get file path given file name.
+
+    :param: [package_level] - Wheather the file is in/out side the
+    `gmail_api_wrapper` package
+    """
     if package_level:
         # Inside `gmail_api_wrapper`
         dirname = os.path.dirname(__file__)
@@ -18,7 +22,8 @@ def get_absolute_path(file_name, package_level=True):
 def read_file(file_name, package_level=True):
     """Get file content given file path.
 
-    :param: file_name:string - name of file
+    :param: [package_level] - Wheather the file is in/out side the
+    `gmail_api_wrapper` package
     """
     file_path = get_absolute_path(file_name, package_level=package_level)
 
@@ -30,7 +35,7 @@ def read_file(file_name, package_level=True):
 def parse_string_to_date(date_to_format):
     """Format date.
 
-    :param: date_to_string:string - Date in String Format
+    :param: date_to_string - Date Object in String Format
     """
     try:
         from dateutil import parser

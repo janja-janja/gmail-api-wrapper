@@ -5,8 +5,8 @@
 
 Feature:
 
-- [x] Add `GWA_CA_CERTS_PEM_FILE` env variable to allow passing SSL cert file
-path
+- [x] Add `GWA_CA_CERTS_PEM_FILE` env variable to allow passing custom SSL cert
+file path
 - [x] Update `LICENSE`
 - [x] Update `README`
 

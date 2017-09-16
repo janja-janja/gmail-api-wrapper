@@ -68,7 +68,10 @@ class GmailAPIConnection(object):
         return credentials
 
     def gmail_api_connect(self):
-        """Get gmail service."""
+        """Get gmail service.
+
+        Get authenticated to the Gmail API.
+        """
         creds = self._get_credentials()
         request = httplib2.Http(ca_certs=self.ca_certs)
         http = creds.authorize(request)
