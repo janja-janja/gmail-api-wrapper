@@ -1,5 +1,16 @@
 # Gmail API Wrapper Changelog
 --------------------------------------------------------------------------------
+
+### v0.0.1a10 [16-09-2017]
+
+Feature:
+
+- [x] Add `GWA_CA_CERTS_PEM_FILE` env variable to allow passing SSL cert file
+path
+- [x] Update `LICENSE`
+- [x] Update `README`
+
+
 ### v0.0.1a7 [11-09-2017]
 
 Bugs:

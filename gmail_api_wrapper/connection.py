@@ -23,6 +23,11 @@ class GmailAPIConnection(object):
         self.scopes = os.environ['GAW_SCOPES']
         self.ca_certs = os.getenv('GWA_CA_CERTS_PEM_FILE')
 
+        assert os.path.exists('~/.credentials/{}'.format(
+            self.client_secret_file_name)) is True, (
+            'Ensure you have saved client_secret.json file in ~/.credentials '
+            'folder')
+
     def _get_connection_flags(self):
         """Get connection flags."""
         try:
