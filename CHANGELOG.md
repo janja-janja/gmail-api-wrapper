@@ -5,7 +5,7 @@
 
 Features:
 
-- [x] Add `GAW_CLEINT_SECRET_FILE_PATH` env variable to allow passing client secret
+- [x] Add `GAW_CLIENT_SECRET_FILE_PATH` env variable to allow passing client secret
 file path.
 - [x] Add `GAW_DISABLE_SSL_CERTS` env variable to allow diasbling ssl certs validation
 - [x] Add a vacation responder activation method

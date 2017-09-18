@@ -44,7 +44,7 @@ Set the following `env` variables.
     export GAW_SCOPES="'gmail-scopes-1 'gmail-scope-2'"
 
     # client_secret json file path
-    export GAW_CLEINT_SECRET_FILE_PATH=<path-to-client-secret-json-file>
+    export GAW_CLIENT_SECRET_FILE_PATH=<path-to-client-secret-json-file>
 
     # If you're using custom SSL certs, set GAW_CA_CERTS_PEM_FILE env variable
     export GAW_CA_CERTS_PEM_FILE=<path-to-custom-pem-ssl-cert>

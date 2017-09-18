@@ -20,7 +20,7 @@ class GmailAPIConnection(object):
         # If modifying these scopes, delete your previously saved credentials
         # at ~/.credentials/gmail-api-wrapper-python-client.json.json
         self.scopes = os.environ['GAW_SCOPES']
-        self.client_secret_file = os.environ['GAW_CLEINT_SECRET_FILE_PATH']
+        self.client_secret_file = os.environ['GAW_CLIENT_SECRET_FILE_PATH']
 
         self.ca_certs = os.getenv('GAW_CA_CERTS_PEM_FILE')
         self.disable_ssl = self._get_bool_value(
