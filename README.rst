@@ -22,9 +22,10 @@ Installation
 Setup
 -----
 
-`gmail-api-wrapper` uses OAuth2 authentication
+`gmail-api-wrapper` uses OAuth authentication
 
-Generate a client ID and client secret Here_
+Generate a client ID and client secret Here_ under section
+**Step 1: Turn on the Gmail API**. Follow steps *a* to *h*.
 
 After you have downloaded the client_secret file, do the following
 
@@ -37,12 +38,11 @@ file you downloaded ealier to `client_secret.json` and move it to the `~/.creden
 folder
 
 
-Env Variables
--------------
+Env Variables -- Get scopes from GMAIL_SCOPES_
+----------------------------------------------
 
 .. code:: bash
 
-    # Get your scope from GMAIL_SCOPES_
     export GAW_SCOPES=['gmail-scopes-1, 'gmail-scope-2']
 
 
@@ -169,5 +169,5 @@ Authors
 .. _Ansible: http://docs.ansible.com/ansible/index.html
 .. _CircleCI: https://circleci.com/gh/yoda-yoda/gmail-api-wrapper
 .. _Github: https://github.com/yoda-yoda/gmail-api-wrapper
-.. _Here: https://developers.google.com/gmail/api/guides/
+.. _Here: https://developers.google.com/gmail/api/quickstart/python
 .. _GMAIL_SCOPES: https://developers.google.com/gmail/api/auth/scopes/
