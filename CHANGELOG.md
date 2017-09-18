@@ -9,6 +9,7 @@ Feature:
 file path
 - [x] Update `LICENSE`
 - [x] Update `README`
+- [x] Add Gmail Api Wrapper Write operations shell
 
 
 ### v0.0.1a7 [11-09-2017]

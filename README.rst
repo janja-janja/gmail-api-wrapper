@@ -42,11 +42,22 @@ Env Variables
 
 .. code:: bash
 
-    export GAW_SCOPES='gmail-scopes'
     # Get your scope from GMAIL_SCOPES_
+    export GAW_SCOPES=['gmail-scopes-1, 'gmail-scope-2']
+
 
     # If you're using custom SSL certs, set GWA_CA_CERTS_PEM_FILE env variable
-    export GWA_CA_CERTS_PEM_FILE='<path-to-custom-pem-ssl-cert>'
+    export GWA_CA_CERTS_PEM_FILE=<path-to-custom-pem-ssl-cert>
+
+
+    # The user Id to use. Default to 'me'. A special identifier for gmail
+    # that refers to the email address used to do OAuth2 handshake
+    export GAW_USER_ID=<your@email.address>
+
+
+    # Your preferred application name. Defaults to 'Gmail API Wrapper'
+    export GAW_APPLICATION_NAME=<your-preferred-application-name>
+
 
 
 Usage - READ
@@ -57,11 +68,11 @@ Usage - READ
     from gmail_api_wrapper.crud.read import GmailAPIReadWrapper
 
 
-    api = GmailAPIReadWrapper()
+    gmail_api = GmailAPIReadWrapper().gmail_api_connect()
 
 
     # Check unread messages. Returns a list of dicts in the below format
-    api.check_new_mail()
+    gmail_api.check_new_mail()
 
     >>> [
 
@@ -73,13 +84,13 @@ Usage - READ
             },
         ]
 
-    # Check new mail from specific sender. Returns a list of dicts
-    api.check_new_mail(sender='example@mail_server.com')
+    # Check new mail from specific sender. Returns a list of dicts above
+    gmail_api.check_new_mail(sender='example@mail_server.com')
 
 
 
-    # Alternatively, you can use to get all unread messages from a specific sender
-    api.get_unread_messages(sender='example@mail_server.com')
+    # Alternatively, you get all unread messages from a specific sender
+    gmail_api.get_unread_messages(sender='example@mail_server.com')
 
     >>> [
 
@@ -95,14 +106,14 @@ Usage - READ
 
 
     # Get all labels present. Returns a list of strings
-    api.get_labels()
+    gmail_api.get_labels()
 
     >>> ['INBOX', 'UNREAD', 'SPAM', 'DRAFTS']
 
 
 
     # Get total message count. Returns a formatted json object
-    api.get_total_messages()
+    gmail_api.get_total_messages()
 
     >>> {
             'Total Messages': 2017,
@@ -112,7 +123,7 @@ Usage - READ
 
 
     # Get a list of messages. Defaults to INBOX if no label is specified
-    api.list_messages()
+    gmail_api.list_messages()
 
     >>> [
 
@@ -126,7 +137,7 @@ Usage - READ
 
 
     # Get a list of messages in DRAFTS and SPAM
-    api.list_messages(labels=['DRAFTS', 'SPAM'])
+    gmail_api.list_messages(labels=['DRAFTS', 'SPAM'])
 
     >>> [
 
@@ -140,7 +151,7 @@ Usage - READ
 
 
     # Get a specific message. `message_id` passed must be a google message id object
-    api.get_message('message_id')
+    gmail_api.get_message('message_id')
 
 
 
