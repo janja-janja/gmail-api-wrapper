@@ -27,36 +27,40 @@ Setup
 Generate a client ID and client secret Here_ under section
 **Step 1: Turn on the Gmail API**. Follow steps *a* to *h*.
 
-After you have downloaded the client_secret file, do the following
-
-.. code:: bash
-
-    mkdir ~/.credentials
-
-Once you're done creating the `.credentials` directory, rename the client_secret
-file you downloaded ealier to `client_secret.json` and move it to the `~/.credentials`
-folder
+After you have downloaded the client_secret file, rename it to a human
+friendly name.
 
 
-Env Variables -- Get scopes from GMAIL_SCOPES_
+Env Variables
 ----------------------------------------------
 
+Set the following `env` variables.
+
+- Get scopes from GMAIL_SCOPES_
+
 .. code:: bash
 
-    export GAW_SCOPES=['gmail-scopes-1, 'gmail-scope-2']
+    # Space delimited string
+    export GAW_SCOPES="'gmail-scopes-1 'gmail-scope-2'"
 
+    # client_secret json file path
+    export GAW_CLEINT_SECRET_FILE_PATH=<path-to-client-secret-json-file>
 
-    # If you're using custom SSL certs, set GWA_CA_CERTS_PEM_FILE env variable
-    export GWA_CA_CERTS_PEM_FILE=<path-to-custom-pem-ssl-cert>
-
+    # If you're using custom SSL certs, set GAW_CA_CERTS_PEM_FILE env variable
+    export GAW_CA_CERTS_PEM_FILE=<path-to-custom-pem-ssl-cert>
 
     # The user Id to use. Default to 'me'. A special identifier for gmail
     # that refers to the email address used to do OAuth2 handshake
-    export GAW_USER_ID=<your@email.address>
-
+    export GAW_USER_ID=<your@gmail.address>
 
     # Your preferred application name. Defaults to 'Gmail API Wrapper'
     export GAW_APPLICATION_NAME=<your-preferred-application-name>
+
+    # Diable ssl cert validation. Default to False
+    export GAW_DISABLE_SSL_CERTS=True
+
+
+- View the permissions_granted_ to you application
 
 
 
@@ -68,7 +72,7 @@ Usage - READ
     from gmail_api_wrapper.crud.read import GmailAPIReadWrapper
 
 
-    gmail_api = GmailAPIReadWrapper().gmail_api_connect()
+    gmail_api = GmailAPIReadWrapper()
 
 
     # Check unread messages. Returns a list of dicts in the below format
@@ -171,3 +175,4 @@ Authors
 .. _Github: https://github.com/yoda-yoda/gmail-api-wrapper
 .. _Here: https://developers.google.com/gmail/api/quickstart/python
 .. _GMAIL_SCOPES: https://developers.google.com/gmail/api/auth/scopes/
+.. _permissions_granted: https://accounts.google.com/b/0/IssuedAuthSubTokens

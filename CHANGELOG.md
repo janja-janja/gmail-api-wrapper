@@ -1,16 +1,26 @@
 # Gmail API Wrapper Changelog
 --------------------------------------------------------------------------------
 
+### v0.1.1a1 [18-09-2017]
+
+Features:
+
+- [x] Add `GAW_CLEINT_SECRET_FILE_PATH` env variable to allow passing client secret
+file path.
+- [x] Add `GAW_DISABLE_SSL_CERTS` env variable to allow diasbling ssl certs validation
+- [x] Add a vacation responder activation method
+- [x] Add a way to view vacation responder in use if any.
+- [x] Update README
+
 ### v0.0.1a11 [16-09-2017]
 
-Feature:
+Features:
 
 - [x] Add `GWA_CA_CERTS_PEM_FILE` env variable to allow passing custom SSL cert
 file path
 - [x] Update `LICENSE`
 - [x] Update `README`
 - [x] Add Gmail Api Wrapper Write operations shell
-
 
 ### v0.0.1a7 [11-09-2017]
 
