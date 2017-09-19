@@ -56,7 +56,7 @@ Set the following `env` variables.
     # Your preferred application name. Defaults to 'Gmail API Wrapper'
     export GAW_APPLICATION_NAME=<your-preferred-application-name>
 
-    # Diable ssl cert validation. Default to False
+    # Disable ssl certs validation. Defaults to False
     export GAW_DISABLE_SSL_CERTS=True
 
 

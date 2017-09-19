@@ -2,20 +2,19 @@
 
 Hosts all write operations to the gmail Inbox
 """
+import base64
+
 from datetime import date, datetime
+from email.mime.text import MIMEText
 
 from dateutil import parser
 
-from gmail_api_wrapper import USER_ID
+from gmail_api_wrapper import USER_ID, INBOX_LABEL, UNREAD_LABEL
 from gmail_api_wrapper.connection import GmailAPIConnection
 
 
-class GmailAPIWriteWrapper(object):
-    """Gmail API write wrapper klass."""
-
-    def __init__(self):
-        """Initialize vital objects."""
-        self.gmail_api = GmailAPIConnection().gmail_api_connect()
+class GmailAPIWriteHelper(object):
+    """Helper for the write operations."""
 
     def _get_email_addresses(self, addresses):
         """Get addresses and return them as a list.
@@ -28,38 +27,76 @@ class GmailAPIWriteWrapper(object):
             'Please pass `addresses` as a CSV string, list or tuple.')
 
         if isinstance(addresses, (list, tuple,)):
-            return addresses
+            return ','.join(each for each in addresses)
 
-        return addresses.split(',')
+        return addresses
 
-    def compose_mail(self,
-                     subject,
-                     body,
-                     to_addresses,
-                     cc_addresses=None,
-                     bcc_addresses=None):
+    def _send_mail(self, message):
+        """Send an email message.
+
+        :param: message: Message to be sent.
+        """
+        try:
+            sent_msg = self.gmail_api.users().messages().send(
+                userId=USER_ID, body=message).execute()
+            return sent_msg
+        except Exception as err:
+            raise Exception('An error occurred: {}'.format(err))
+
+    def _get_epoch_equivalent(self, date_to_format):
+        """Get timestamp."""
+        epoch = datetime.utcfromtimestamp(0)
+        return (date_to_format - epoch).total_seconds() * 1000
+
+
+class GmailAPIWriteWrapper(GmailAPIWriteHelper):
+    """Gmail API write wrapper klass.
+
+    This class hosts write operations to the Gmail mailbox
+    """
+
+    def __init__(self):
+        """Initialize vital objects."""
+        self.gmail_api = GmailAPIConnection().gmail_api_connect()
+
+    def compose_mail(self, subject, body, to, cc=None, bcc=None):
         """Compose new message.
 
         :param: subject - Email Subject as a string object.
 
-        :param: to_addresses - A CSV string or a list of email addresses to
+        :param: to - A CSV string or a list of email addresses to
         send the message to
 
-        :param: [cc_addresses] - An optional CSV string or a list of email
+        :param: [cc] - An optional CSV string or a list of email
         addresses to carbon copy the message to
 
-        :param: [bcc_addresses] - An optional CSV string or a list of email
+        :param: [bcc] - An optional CSV string or a list of email
         addresses to blind carbon copy the message to
         """
-        to_addresses = self._get_email_addresses(to_addresses)
+        to_addresses = self._get_email_addresses(to)
+        message = MIMEText(body)
 
-        if cc_addresses:
-            cc_addresses = self._get_email_addresses(cc_addresses)
+        if cc:
+            cc_addresses = self._get_email_addresses(cc)
+            message['cc'] = cc_addresses
 
-        if bcc_addresses:
-            bcc_addresses = self._get_email_addresses(bcc_addresses)
+        if bcc:
+            bcc_addresses = self._get_email_addresses(bcc)
+            message['bcc'] = bcc_addresses
 
-        pass
+        message['to'] = to_addresses
+        message['from'] = USER_ID
+        message['subject'] = subject
+
+        b64_raw = base64.urlsafe_b64encode(message.as_bytes())
+
+        message_setting = {
+            'snippet': '{}...'.format(body[:10]),
+            'raw': b64_raw.decode(),
+            'labelIds': [UNREAD_LABEL, INBOX_LABEL]
+        }
+        sent_msg = self._send_mail(message_setting)
+        return sent_msg
 
     def create_label(self, label_name):
         """Create a new label in your Gmail Mailbox.
@@ -67,7 +104,12 @@ class GmailAPIWriteWrapper(object):
         :param: label_name - The name of the label in string format
         """
         assert isinstance(label_name, (str,)), ('Label name must be a string')
-        pass
+        label_settings = {
+            'name': label_name
+        }
+        resp = self.gmail_api.users().labels().create(
+            userId=USER_ID, body=label_settings).execute()
+        return resp
 
     def create_signatute(self, signature_body):
         """Create a signature to be associated with your Gmail Mailbox.
@@ -77,11 +119,6 @@ class GmailAPIWriteWrapper(object):
         assert isinstance(signature_body, (str,)), (
             '`signature_body` must be a string')
         pass
-
-    def _get_epoch_equivalent(self, date_to_format):
-        """Get timestamp."""
-        epoch = datetime.utcfromtimestamp(0)
-        return (date_to_format - epoch).total_seconds() * 1000
 
     def activate_vacation_responder(self,
                                     body,
@@ -115,7 +152,7 @@ class GmailAPIWriteWrapper(object):
 
         assert date_to_activate < date_to_deactivate, (
             'Auto-responder activation date must be grater than {}'.format(
-                date_to_activate.isoformat()))
+                date_to_deactivate.isoformat()))
 
         start_time = self._get_epoch_equivalent(date_to_activate)
         end_time = self._get_epoch_equivalent(date_to_deactivate)

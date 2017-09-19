@@ -1,6 +1,15 @@
 # Gmail API Wrapper Changelog
 --------------------------------------------------------------------------------
 
+### v0.1.1a2 [19-09-2017]
+
+Features:
+
+- [x] Allow composing and sending a new message without an attachment
+- [x] Allow creating a new label
+- [x] Wrap write API helper methods inside `GmailAPIWriteHelper` class
+
+
 ### v0.1.1a1 [18-09-2017]
 
 Features:
