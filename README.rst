@@ -1,6 +1,9 @@
 Gmail API Wrapper For Python
 ============================
 
+This is a wrapper for the `google-api-python-client` library by Google.
+
+
 Behind the scenes
 ----------------
 
@@ -25,10 +28,10 @@ Setup
 `gmail-api-wrapper` uses OAuth authentication
 
 Generate a client ID and client secret Here_ under section
-**Step 1: Turn on the Gmail API**. Follow steps *a* to *h*.
+**Step 1: Turn on the Gmail API**. Follow steps **a** to **h**.
 
 After you have downloaded the client_secret file, rename it to a human
-friendly name.
+friendly name. [Optional]
 
 
 Env Variables
@@ -157,6 +160,44 @@ Usage - READ
     # Get a specific message. `message_id` passed must be a google message id object
     gmail_api.get_message('message_id')
 
+
+Usage - WRITE
+-------------
+
+.. code:: python
+
+    from gmail_api_wrapper.crud.write import GmailAPIWriteWrapper
+
+    api = GmailAPIWriteWrapper()
+
+
+    # compose new mail
+    api.compose_mail(subject='API Wrapper', body='Py client', to='email1,email2')
+
+    >>> {
+            'id': 'blah-blah',
+            'labelsIds': ['INBOX', 'SENT', 'UNREAD'],
+            'threadId': 'blah-blah'
+        }
+
+    # compose new mail with cc and bcc
+    api.compose_mail(subject='API Wrapper', body='Py client', to='email1,email2', cc='email1,email2', bcc='email1,email2')
+
+    >>> {
+            'id': 'blah-blah',
+            'labelsIds': ['INBOX', 'SENT', 'UNREAD'],
+            'threadId': 'blah-blah'
+        }
+
+    # create new label
+    api.create_label(name='Integrations')
+
+    >>> {
+            'id': 'blah-blah',
+            'labelListVisibility': 'labelShow',
+            'messageListVisibility': 'show',
+            'name': 'Integrations'
+        }
 
 
 Authors

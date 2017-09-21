@@ -18,8 +18,9 @@ class GmailAPIModifyWrapper(object):
         body_modifier = {
             'removeLabelIds': [UNREAD_LABEL]
         }
-        return self.gmail_api.users().messages().modify(
+        resp = self.gmail_api.users().messages().modify(
             userId=USER_ID, id=msg_id, body=body_modifier).execute()
+        return resp
 
     def bulk_mark_as_read(self, message_ids=[]):
         """Bulk mark UNREAD emails as READ.
@@ -27,10 +28,10 @@ class GmailAPIModifyWrapper(object):
         TODO: Confirm this
         """
         body_modifier = {
+            'messageIds': message_ids,
             'addLabelIds': [READ_LABEL],
             'removeLabelIds': [UNREAD_LABEL]
         }
-        return self.gmail_api.users().messages().batchModify(
-            userId=USER_ID, messageIds=message_ids,
-            body=body_modifier
-        ).execute()
+        resp = self.gmail_api.users().messages().batchModify(
+            userId=USER_ID, body=body_modifier).execute()
+        return resp

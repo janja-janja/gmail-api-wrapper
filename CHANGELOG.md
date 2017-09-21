@@ -8,6 +8,7 @@ Features:
 - [x] Allow composing and sending a new message without an attachment
 - [x] Allow creating a new label
 - [x] Wrap write API helper methods inside `GmailAPIWriteHelper` class
+- [x] Add `GoogleAPIConnection` to wrap all connection shenanigans in `connection.py`
 
 
 ### v0.1.1a1 [18-09-2017]

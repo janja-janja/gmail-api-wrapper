@@ -144,10 +144,10 @@ class GmailAPIWriteWrapper(GmailAPIWriteHelper):
         assert isinstance(date_to_deactivate, (str, datetime, date,)), (
             '`date_to_deactivate` must be a date, datetime or a string object')
 
-        if isinstance(date_to_activate, (str,)):
+        if isinstance(date_to_activate, str):
             date_to_activate = parser.parse(date_to_activate)
 
-        if isinstance(date_to_deactivate, (str,)):
+        if isinstance(date_to_deactivate, str):
             date_to_deactivate = parser.parse(date_to_deactivate)
 
         assert date_to_activate < date_to_deactivate, (
@@ -172,8 +172,9 @@ class GmailAPIWriteWrapper(GmailAPIWriteHelper):
 
     def get_vacation_responder(self):
         """Get vacation setting."""
-        return self.gmail_api.users().settings().getVacation(
+        resp = self.gmail_api.users().settings().getVacation(
             userId=USER_ID).execute()
+        return resp
 
     def deactivate_vacation_responder(self, body):
         """Activate your vacation responder."""
