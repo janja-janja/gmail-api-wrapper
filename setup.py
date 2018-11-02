@@ -20,7 +20,7 @@ setup(
     keywords=['gmail-api-wrapper', 'gmail python client'],
     packages=find_packages(exclude=['tests', ]),
     install_requires=[
-        'google-api-python-client==1.6.3',
+        'google-api-python-client',
         'python-dateutil',
     ],
     classifiers=[
