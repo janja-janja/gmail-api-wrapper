@@ -3,7 +3,7 @@ import json
 
 from dateutil import parser
 
-from gmail_api_wrapper import USER_ID, INBOX_LABEL, UNREAD_LABEL
+from gmail_api_wrapper import INBOX_LABEL, UNREAD_LABEL, USER_ID
 from gmail_api_wrapper.connection import GmailAPIConnection
 
 

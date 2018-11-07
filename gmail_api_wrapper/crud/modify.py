@@ -2,7 +2,7 @@
 
 Marking Messages as UNREAD or as READ
 """
-from gmail_api_wrapper import USER_ID, UNREAD_LABEL, READ_LABEL
+from gmail_api_wrapper import READ_LABEL, UNREAD_LABEL, USER_ID
 from gmail_api_wrapper.connection import GmailAPIConnection
 
 

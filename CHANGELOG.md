@@ -1,6 +1,15 @@
 # Gmail API Wrapper Changelog
 --------------------------------------------------------------------------------
 
+### v0.1.1a3 [07-11-2018]
+
+Enhancements:
+
+- [x] Read client ID & secret from `~/.credentials/client_secret.json`
+- [x] Remove `GAW_CLIENT_SECRET_FILE_PATH` env variable
+- [x] Arrange import statements in the correct order
+
+
 ### v0.1.1a2 [19-09-2017]
 
 Features:

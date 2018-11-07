@@ -1,32 +1,33 @@
 """GMAIL Credentials Auth."""
-import httplib2
 import os
 import sys
 
 from apiclient import discovery
+
+from gmail_api_wrapper import APPLICATION_NAME
+
+import httplib2
+
 
 from oauth2client import client
 from oauth2client import tools
 from oauth2client.file import Storage
 
 
-from gmail_api_wrapper import APPLICATION_NAME
-
-
 class GoogleAPIConnection(object):
     """An API connection establisher for Google APIs."""
 
-    def __init__(self, service):
+    def __init__(self, service, version):
         """Google API connection establisher.
 
         :param: service - Service to establish a connection to e.g gmail
         """
         self.service = service
+        self.version = version
 
         # If modifying these scopes, delete your previously saved credentials
         # at ~/.credentials/gmail-api-wrapper-py.json.json
         self.scopes = os.environ['GAW_SCOPES']
-        self.client_secret_file = os.environ['GAW_CLIENT_SECRET_FILE_PATH']
 
         self.ca_certs = os.getenv('GAW_CA_CERTS_PEM_FILE')
         self.disable_ssl = self._get_bool_value(
@@ -76,13 +77,13 @@ class GoogleAPIConnection(object):
         if not os.path.exists(credential_dir):
             os.makedirs(credential_dir)
         credential_path = os.path.join(
-            credential_dir, 'gmail-api-wrapper-py.json')
+            credential_dir, 'client_secret.json')
 
         store = Storage(credential_path)
         credentials = store.get()
+
         if not credentials or credentials.invalid:
-            flow = client.flow_from_clientsecrets(
-                self.client_secret_file, self.scopes)
+            flow = client.flow_from_clientsecrets(credential_path, self.scopes)
             flow.user_agent = APPLICATION_NAME
             api_flags = self._get_connection_flags()
             if api_flags:
@@ -98,7 +99,7 @@ class GoogleAPIConnection(object):
             ca_certs=self.ca_certs,
             disable_ssl_certificate_validation=self.disable_ssl)
         http = creds.authorize(request)
-        service = discovery.build(self.service, 'v1', http=http)
+        service = discovery.build(self.service, self.version, http=http)
         return service
 
 
@@ -110,6 +111,6 @@ class GmailAPIConnection(object):
 
         Get authenticated to the Gmail API.
         """
-        google_api = GoogleAPIConnection(service='gmail')
+        google_api = GoogleAPIConnection(service='gmail', version='v1')
         service = google_api.get_service()
         return service

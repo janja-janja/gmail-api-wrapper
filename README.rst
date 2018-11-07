@@ -30,8 +30,8 @@ Setup
 Generate a client ID and client secret Here_ under section
 **Step 1: Turn on the Gmail API**. Follow steps **a** to **h**.
 
-After you have downloaded the client_secret file, rename it to a human
-friendly name. [Optional]
+After you have downloaded the `client_secret.json` file,
+move it to the `~/.credentials/` directory in your home directory.
 
 
 Env Variables
@@ -47,7 +47,6 @@ Set the following `env` variables.
     export GAW_SCOPES="'gmail-scopes-1 'gmail-scope-2'"
 
     # client_secret json file path
-    export GAW_CLIENT_SECRET_FILE_PATH=<path-to-client-secret-json-file>
 
     # If you're using custom SSL certs, set GAW_CA_CERTS_PEM_FILE env variable
     export GAW_CA_CERTS_PEM_FILE=<path-to-custom-pem-ssl-cert>
